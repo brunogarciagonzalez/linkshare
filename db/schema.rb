@@ -30,14 +30,14 @@ ActiveRecord::Schema.define(version: 20180605182833) do
 
   create_table "review_comments", force: :cascade do |t|
     t.integer "review_id"
-    t.integer "user_id"
+    t.integer "review_commenter_id"
     t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "reviews", force: :cascade do |t|
-    t.integer "user_id"
+    t.integer "reviewer_id"
     t.integer "link_id"
     t.text "content"
     t.integer "rating"
@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 20180605182833) do
 
   create_table "tag_comments", force: :cascade do |t|
     t.integer "tag_id"
-    t.integer "user_id"
+    t.integer "tag_commenter_id"
     t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

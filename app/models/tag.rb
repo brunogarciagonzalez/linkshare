@@ -1,2 +1,8 @@
 class Tag < ApplicationRecord
+  #### associations ####
+  has_many :tag_comments
+  has_many :link_tag_joins
+  has_many :links, through: :link_tag_joins
 end
+
+# done associations
