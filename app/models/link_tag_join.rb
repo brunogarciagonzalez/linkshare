@@ -1,0 +1,2 @@
+class LinkTagJoin < ApplicationRecord
+end

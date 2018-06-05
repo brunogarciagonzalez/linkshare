@@ -1,0 +1,2 @@
+class UserShare < ApplicationRecord
+end
