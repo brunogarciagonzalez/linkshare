@@ -1,7 +1,18 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+# User(id: integer, username: string, password_digest: string, email: string)
+User.create(username: "Bruno", password_digest: "password", email: "brunogarciagonzalez@outlook.com")
+User.create(username: "German", password_digest: "password", email: "germanjii@gmail.com")
+# Link(id: integer, url: string)
+Link.create(url: "www.ganjacabana.com")
+# Tag(id: integer, title: string)
+Tag.create(title:"Cannabis")
+# LinkTagJoin(id: integer, link_id: integer, tag_id: integer)
+LinkTagJoin.create(link_id: 1, tag_id: 1)
+# TagComment(id: integer, tag_id: integer, tag_commenter_id: integer, content: text)
+TagComment.create(tag_id: 1, tag_commenter_id: 2, content: "dope")
+TagComment.create(tag_id: 1, tag_commenter_id: 1, content: "ganja")
+# Review(id: integer, reviewer_id: integer, link_id: integer, content: text, rating: integer)
+Review.create(reviewer_id: 1, link_id: 1, content: "Maybe in my roadmap!", rating: 10)
+# ReviewComment(id: integer, review_id: integer, review_commenter_id: integer, content: text)
+ReviewComment.create(review_id: 1, review_commenter_id: 2, content: "When tho?")
+# UserShare(id: integer, user_id: integer, review_id: integer, link_id: integer)
+UserShare.create(user_id: 1, review_id: 1, link_id: 1)
