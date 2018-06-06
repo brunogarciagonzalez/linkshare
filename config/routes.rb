@@ -14,5 +14,7 @@ Rails.application.routes.draw do
   #### tag_comments-related ####
   post "/tag-comments", to: 'tag_comments#all_comments_for_tag'
   post "/tag-comments/get", to: 'tag_comments#get_tag_comment'
-  
+  post "/tag-comments/construct", to: 'tag_comments#construct_tag_comment'
+  post "/tag-comments/update", to: 'tag_comments#update_tag_comment'
+  post "/tag-comments/destroy", to: 'tag_comments#destroy_tag_comment'
 end
