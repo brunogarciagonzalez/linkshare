@@ -47,7 +47,17 @@ class TagsController < ApplicationController
   end
 
   def update_tag
-    # need route
+    # will go through validations-check
+    tag_id_from_params = strong_update_tag_params[:id]
+    new_tag_title_from_params = strong_update_tag_params[:new_title]
+
+    @tag = Tag.find(tag_id_from_params)
+
+    if @tag.update(title: format_title(new_tag_title_from_params))
+      render json: {status: "success", action:"update_tag", tag: @tag}, status: 200
+    else
+      render json: {status: "failure", action:"update_tag", errors: @tag.errors.full_messages}, status: 200
+    end
   end
 
   private
@@ -60,6 +70,9 @@ class TagsController < ApplicationController
     params.require(:tag).permit(:id)
   end
 
+  def strong_update_tag_params
+    params.require(:tag).permit(:id, :new_title)
+  end
   #### helper functions ####
   def format_title(title)
     title.gsub(/\w+/) do |word|
