@@ -5,6 +5,7 @@ class CreateReviews < ActiveRecord::Migration[5.1]
       t.integer :link_id
       t.text :content
       t.integer :rating
+      t.boolean :active, default: true
 
       t.timestamps
     end
