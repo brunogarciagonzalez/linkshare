@@ -9,4 +9,5 @@ Rails.application.routes.draw do
   post '/tags/construct', to: 'tags#construct_tag'
   post '/tags/destroy', to: 'tags#destroy_tag'
   post '/tags/update', to: 'tags#update_tag'
+  post '/tags/get', to: 'tags#get_tag'
 end

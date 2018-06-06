@@ -6,6 +6,17 @@ class TagsController < ApplicationController
     render json: {tags: @tags}, status: 200
   end
 
+  def get_tag
+    tag_id_from_params = strong_get_tag_params[:id]
+    @tag = Tag.find(tag_id_from_params)
+    byebug
+    if @tag
+      render json: {status: "success", action: "get_tag", tag: @tag}, status: 200
+    else
+      render json: {status: "failure", action: "get_tag", details: "tag not found (by id)"}, status: 200
+    end
+  end
+
   def construct_tag
     # add new tag (formatted) to database if it is validated
     # return json with status and either new tag || errors array
@@ -22,7 +33,7 @@ class TagsController < ApplicationController
   def destroy_tag
     # destroy tag & link_tag_joins with given tag.id
     # if this is only tag for a link, deactivate link & its related db items
-    tag_id_from_params = strong_deactivate_tag_params[:id]
+    tag_id_from_params = strong_destroy_tag_params[:id]
     @tag = Tag.find(tag_id_from_params)
 
     if @tag
@@ -47,7 +58,7 @@ class TagsController < ApplicationController
   end
 
   def update_tag
-    # will go through validations-check
+    # update tag with given tag.id
     tag_id_from_params = strong_update_tag_params[:id]
     new_tag_title_from_params = strong_update_tag_params[:new_title]
 
@@ -66,13 +77,18 @@ class TagsController < ApplicationController
     params.require(:tag).permit(:title)
   end
 
-  def strong_deactivate_tag_params
+  def strong_destroy_tag_params
     params.require(:tag).permit(:id)
   end
 
   def strong_update_tag_params
     params.require(:tag).permit(:id, :new_title)
   end
+
+  def strong_get_tag_params
+    params.require(:tag).permit(:id)
+  end
+
   #### helper functions ####
   def format_title(title)
     title.gsub(/\w+/) do |word|
