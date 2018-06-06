@@ -11,10 +11,18 @@ Rails.application.routes.draw do
   post '/tags/update', to: 'tags#update_tag'
   post '/tags/get', to: 'tags#get_tag'
 
-  #### tag_comments-related ####
-  post "/tag-comments", to: 'tag_comments#all_comments_for_tag'
+  #### tag_comment-related ####
+  post "/tag-comments/for_tag", to: 'tag_comments#all_comments_for_tag'
   post "/tag-comments/get", to: 'tag_comments#get_tag_comment'
   post "/tag-comments/construct", to: 'tag_comments#construct_tag_comment'
   post "/tag-comments/update", to: 'tag_comments#update_tag_comment'
   post "/tag-comments/destroy", to: 'tag_comments#destroy_tag_comment'
+
+  #### link-related ####
+  get "/links", to: 'links#all_links'
+  post "/links/for_tag", to: 'links#all_links_for_tag'
+  post "/links/get", to: 'links#get_link'
+  post "/links/construct", to: 'links#construct_link'
+  post "/links/update", to: 'links#update_link'
+  post "/links/destroy", to: 'links#destroy_link'
 end
