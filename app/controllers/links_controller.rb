@@ -20,7 +20,15 @@ class LinksController < ApplicationController
   end
 
   def get_link
+    link_id_from_params = strong_get_link_params[:id]
 
+    @link = Link.find(link_id_from_params)
+
+    if @link
+      render json: {status: "success", action: "get_link", link: @link}, status: 200
+    else
+      render json: {status: "failure", action: "get_link", details: "link not found (by id)"}, status: 200
+    end
   end
 
   def construct_link
@@ -40,4 +48,7 @@ class LinksController < ApplicationController
     params.require(:tag).permit(:id)
   end
 
+  def strong_get_link_params
+    params.require(:link).permit(:id)
+  end
 end
