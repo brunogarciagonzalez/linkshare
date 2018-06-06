@@ -1,6 +1,6 @@
 # User(id: integer, username: string, password_digest: string, email: string)
-User.create(username: "Bruno", password_digest: "password", email: "brunogarciagonzalez@outlook.com")
-User.create(username: "German", password_digest: "password", email: "germanjii@gmail.com")
+User.create(username: "Bruno", password: "password", email: "brunogarciagonzalez@outlook.com")
+User.create(username: "German", password: "password", email: "germanjii@gmail.com")
 # Link(id: integer, url: string)
 Link.create(url: "www.ganjacabana.com")
 # Tag(id: integer, title: string)
