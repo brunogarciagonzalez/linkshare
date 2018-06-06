@@ -19,7 +19,7 @@ class UsersController < ApplicationController
     end
   end
 
-  def create_account # need to add route
+  def construct_account # need to add route
     # take in params
     # create user with params
     # check errors
