@@ -6,6 +6,7 @@ class Tag < ApplicationRecord
 
   #### associations ####
   validates :title, presence: true
+  validates :title, uniqueness: true
 end
 
 # done associations
