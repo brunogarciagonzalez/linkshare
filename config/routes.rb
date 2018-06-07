@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   post '/users/login', to: 'users#login'
   post '/users/construct', to: 'users#construct_account'
   post '/users/update', to: 'users#update_account'
+  post '/users/destroy', to: 'users#destroy_account'
+  post '/users/get', to: 'users#get_account'
 
   #### tag-related ####
   get '/tags', to: 'tags#all_tags'
