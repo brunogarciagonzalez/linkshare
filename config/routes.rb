@@ -7,6 +7,10 @@ Rails.application.routes.draw do
   post '/users/destroy', to: 'users#destroy_account'
   post '/users/get', to: 'users#get_account'
 
+  #### user_share-related ####
+  post '/user-shares/construct', to: 'user_shares#construct_user_share'
+  post '/user-shares/destroy', to: 'user_shares#destroy_user_share'
+
   #### tag-related ####
   get '/tags', to: 'tags#all_tags'
   post '/tags/get', to: 'tags#get_tag'

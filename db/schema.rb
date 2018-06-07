@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 20180605182833) do
   create_table "reviews", force: :cascade do |t|
     t.integer "reviewer_id"
     t.integer "link_id"
+    t.integer "user_share_id"
     t.text "content"
     t.integer "rating"
     t.boolean "active", default: true
