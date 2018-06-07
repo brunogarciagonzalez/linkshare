@@ -1,0 +1,3 @@
+class LinkTagJoinsController < ApplicationController
+
+end
