@@ -6,6 +6,7 @@ class Review < ApplicationRecord
 
   #### validations ####
   validates :reviewer_id, presence: true
+  validates :user_share_id, presence: true
   validates :link_id, presence: true
   validates :content, presence: true
   validates :content, length: { minimum: 240 }
