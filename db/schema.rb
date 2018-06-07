@@ -18,14 +18,15 @@ ActiveRecord::Schema.define(version: 20180605182833) do
   create_table "link_tag_joins", force: :cascade do |t|
     t.integer "link_id"
     t.integer "tag_id"
-    t.boolean "active", default: true
+    t.boolean "user_deactivation", default: false
+    t.boolean "admin_deactivation", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "links", force: :cascade do |t|
     t.string "url"
-    t.boolean "active", default: true
+    t.boolean "admin_deactivation", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -34,6 +35,8 @@ ActiveRecord::Schema.define(version: 20180605182833) do
     t.integer "review_id"
     t.integer "review_commenter_id"
     t.text "content"
+    t.boolean "user_deactivation", default: false
+    t.boolean "admin_deactivation", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -44,7 +47,8 @@ ActiveRecord::Schema.define(version: 20180605182833) do
     t.integer "user_share_id"
     t.text "content"
     t.integer "rating"
-    t.boolean "active", default: true
+    t.boolean "user_deactivation", default: false
+    t.boolean "admin_deactivation", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -53,6 +57,8 @@ ActiveRecord::Schema.define(version: 20180605182833) do
     t.integer "tag_id"
     t.integer "tag_commenter_id"
     t.text "content"
+    t.boolean "user_deactivation", default: false
+    t.boolean "admin_deactivation", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -67,7 +73,8 @@ ActiveRecord::Schema.define(version: 20180605182833) do
     t.integer "user_id"
     t.integer "review_id"
     t.integer "link_id"
-    t.boolean "active", default: true
+    t.boolean "user_deactivation", default: false
+    t.boolean "admin_deactivation", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -76,6 +83,8 @@ ActiveRecord::Schema.define(version: 20180605182833) do
     t.string "username"
     t.string "password_digest"
     t.string "email"
+    t.boolean "user_deactivation", default: false
+    t.boolean "admin_deactivation", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
