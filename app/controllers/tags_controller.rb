@@ -3,7 +3,7 @@ class TagsController < ApplicationController
     # return all tags, sorted alphabetically
     @tags = Tag.order('title ASC')
 
-    render json: {tags: @tags}, status: 200
+    render json: {status: "success", action: "all_tags", tags: @tags}, status: 200
   end
 
   def get_tag
