@@ -25,4 +25,8 @@ Rails.application.routes.draw do
   post "/links/construct", to: 'links#construct_link'
   post "/links/update", to: 'links#update_link'
   post "/links/destroy", to: 'links#destroy_link'
+
+  #### link_tag_join -related ####
+  post "/link-tag-joins/construct", to: 'link_tag_joins#construct_link_tag_join'
+
 end
