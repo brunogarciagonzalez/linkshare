@@ -37,6 +37,8 @@ class TagsController < ApplicationController
     @tag = Tag.find(tag_id_from_params)
 
     if @tag
+      destroy_tag_comments(@tag)
+
       @links = @tag.links
 
       @links.each do |link|
@@ -108,6 +110,13 @@ class TagsController < ApplicationController
     link.update(active: false)
     deactivate_all_reviews(link)
     deactivate_all_user_shares(link)
+  end
+
+  def destroy_tag_comments(tag)
+    tag_comments = tag.tag_comments
+    tag_comments.each do |tag_comment|
+      tag_comment.destroy
+    end
   end
 
   #### functions that are helpers of helper functions ####
