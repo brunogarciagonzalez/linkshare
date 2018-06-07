@@ -1,15 +1,16 @@
 Rails.application.routes.draw do
 
   #### user-related ####
-  post '/login', to: 'users#login'
-  post '/create_account', to: 'users#construct_account'
+  post '/users/login', to: 'users#login'
+  post '/users/construct', to: 'users#construct_account'
+  post '/users/update', to: 'users#update_account'
 
   #### tag-related ####
   get '/tags', to: 'tags#all_tags'
-  post '/tags/construct', to: 'tags#construct_tag'
-  post '/tags/destroy', to: 'tags#destroy_tag'
-  post '/tags/update', to: 'tags#update_tag'
   post '/tags/get', to: 'tags#get_tag'
+  post '/tags/construct', to: 'tags#construct_tag'
+  post '/tags/update', to: 'tags#update_tag'
+  post '/tags/destroy', to: 'tags#destroy_tag'
 
   #### tag_comment-related ####
   post "/tag-comments/for_tag", to: 'tag_comments#all_comments_for_tag'
