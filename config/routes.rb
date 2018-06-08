@@ -6,10 +6,12 @@ Rails.application.routes.draw do
   post '/users/update', to: 'users#update_account'
   post '/users/destroy', to: 'users#destroy_account'
   post '/users/get', to: 'users#get_account'
+  post '/users/deactivate', to: 'users#deactivate_account'
 
   #### user_share-related ####
   post '/user-shares/construct', to: 'user_shares#construct_user_share'
   post '/user-shares/destroy', to: 'user_shares#destroy_user_share'
+  post '/user-shares/update', to: 'user_shares#update_user_share'
 
   #### tag-related ####
   get '/tags', to: 'tags#all_tags'
@@ -29,9 +31,9 @@ Rails.application.routes.draw do
   get "/links", to: 'links#all_links'
   post "/links/for_tag", to: 'links#all_links_for_tag'
   post "/links/get", to: 'links#get_link'
-  post "/links/construct", to: 'links#construct_link'
-  post "/links/update", to: 'links#update_link'
-  post "/links/destroy", to: 'links#destroy_link'
+  # post "/links/construct", to: 'links#construct_link'
+  # post "/links/update", to: 'links#update_link'
+  # post "/links/destroy", to: 'links#destroy_link'
 
   #### link_tag_join -related ####
   post "/link-tag-joins/construct", to: 'link_tag_joins#construct_link_tag_join'

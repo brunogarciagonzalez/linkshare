@@ -4,9 +4,8 @@ class UserShare < ApplicationRecord
   belongs_to :link
   has_one :review
 
-  #### associations ####
+  #### validations ####
   validates :user_id, presence: true
-  validates :review_id, presence: true
   validates :link_id, presence: true
 end
 
