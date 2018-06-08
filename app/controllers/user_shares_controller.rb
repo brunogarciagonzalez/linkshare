@@ -34,7 +34,11 @@ class UserSharesController < ApplicationController
       # should be an array of tags
     tags_from_params.each do |tag|
       @tag = Tag.find_by(title: tag)
-      LinkTagJoin.create(tag_id: @tag.id, link_id: @link.id)
+
+      # only if link_tag_join doesn't already exists
+      if !LinkTagJoin.find_by(link_id: @link.id, tag_id: @tag.id)
+        LinkTagJoin.create(tag_id: @tag.id, link_id: @link.id)
+      end
     end
 
     # persist the review in the database
@@ -61,33 +65,53 @@ class UserSharesController < ApplicationController
     render json: {status: "success", action: "construct_user_share", user_share: @user_share, review: @review, link: @link, token: token_from_params}, status: 200
   end
 
-  def destroy_user_share
-    user_share_id_from_params = strong_destroy_user_share_params[:id]
+  def update_user_share
+    ## expected params ####
+    # user_share: {
+        # :token,
+        # :review_information => {:review_content, :review_rating},
+        # :link_information => {:url},
+        # :tags => [...tags]
+    # }
 
+  end
+
+  def destroy_user_share
+    ## expected params ####
+    # user_share: {
+        # :id
+    # }
+
+    user_share_id_from_params = strong_destroy_user_share_params[:id]
+    byebug
     @user_share = UserShare.find(user_share_id_from_params)
 
-    if @user_share
-      # destroy/deactivate user_share-associated items
-        # link if this only user_share with link
-        byebug
-          if @user_share.link.user_shares.length == 1
-            @user_share.link.destroy
-          end
-
-      # review and review-comments (see users_controller#destroy)
-        @user_share.review.review_comments.each do |review_comment|
-          review_comment.destroy
-        end
-
-        @user_share.review.destroy
-
-      # destroy user_share
-      @user_share.destroy
-
-      render json: {status: "success", action: "destroy_user_share", user_share: @user_share}, status: 200
-    else
+    if !@user_share
       render json: {status: "failure", action: "destroy_user_share", user_share: @user_share, details: "user_share not found (by id)"}, status: 200
+      return
     end
+
+    # destroy/deactivate user_share-associated items
+    # link if this only user_share with link
+    if @user_share.link.user_shares.length == 1
+      @link_tag_join = LinkTagJoin.find(@user_share.link.user_shares.first.id)
+
+      @link_tag_join.destroy
+
+      @user_share.link.destroy
+    end
+
+    # review and review-comments (see users_controller#destroy)
+    @user_share.review.review_comments.each do |review_comment|
+      review_comment.destroy
+    end
+
+    @user_share.review.destroy
+
+    # destroy user_share
+    @user_share.destroy
+
+    render json: {status: "success", action: "destroy_user_share", user_share: @user_share, link_tag_join: @link_tag_join, review: @user_share.review, review_comments: @user_share.review.review_comments}, status: 200
   end
 
   private

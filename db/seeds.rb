@@ -5,6 +5,7 @@ User.create(username: "German", password: "2&Password", email: "germanjii@gmail.
 Link.create(url: "https://www.x-cannabis.com")
 # Tag(id: integer, title: string)
 Tag.create(title:"Cannabis")
+Tag.create(title: "Features")
 # LinkTagJoin(id: integer, link_id: integer, tag_id: integer)
 LinkTagJoin.create(link_id: 1, tag_id: 1)
 # TagComment(id: integer, tag_id: integer, tag_commenter_id: integer, content: text)
