@@ -10,7 +10,7 @@ class UserSharesController < ApplicationController
     # }
 
     ## link-related ##
-    link_url_from_params = strong_construct_user_share_params[:link_information]["url"]
+    link_url_from_params = strong_construct_user_share_params[:link_information][:url]
 
     ## tag-related ##
     tags_from_params = strong_construct_user_share_params[:tags]
@@ -66,13 +66,35 @@ class UserSharesController < ApplicationController
   end
 
   def update_user_share
-    ## expected params ####
+    ## expected params ##
     # user_share: {
+        # :id,
         # :token,
         # :review_information => {:review_content, :review_rating},
         # :link_information => {:url},
         # :tags => [...tags]
     # }
+
+    ## user_share -related ##
+    user_share_id_from_params = strong_update_user_share_params[:id]
+
+    ## link-related ##
+    link_url_from_params = strong_update_user_share_params[:link_information][:url]
+
+    ## tag-related ##
+    tags_from_params = strong_update_user_share_params[:tags]
+
+    ## review-related ##
+    review_content_from_params = strong_update_user_share_params[:review_information][:content]
+    review_rating_from_params = strong_update_user_share_params[:review_information][:rating]
+
+    ## user-related ##
+    token_from_params = strong_update_user_share_params[:token]
+    user_id = get_user_id_from_token(token_from_params)
+
+    @user_share = UserShare.find(user_share_id_from_params)
+
+    # if only share associated with the link, then @link.update, else make a new link and connect that with this user share and with everything else here
 
   end
 
@@ -122,6 +144,10 @@ class UserSharesController < ApplicationController
 
   def strong_destroy_user_share_params
     params.require(:user_share).permit(:id)
+  end
+
+  def strong_update_user_share_params
+    params.require(:user_share).permit(:id, :token, :review_information => [:content, :rating], :link_information => [:url], tags: [])
   end
 
   #### helper functions ####
