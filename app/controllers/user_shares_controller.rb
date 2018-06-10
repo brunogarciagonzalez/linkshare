@@ -1,5 +1,50 @@
 class UserSharesController < ApplicationController
   # user_id: nil, review_id: nil, link_id: nil, active: true
+
+  def get_user_share
+    ## expected params ####
+    # user_share: {
+        # :id
+    # }
+
+    user_share_id_from_params = strong_get_user_share_params[:id]
+
+    @user_share = UserShare.find(user_share_id_from_params)
+
+    if !@user_share
+      render json: {status: "failure", action: "get_user_share", details: "user_share not found (by id)"}, status: 200
+      return
+    end
+
+    serialized_user_share = {id: @user_share.id, user: @user_share.user.username, review: {id: @user_share.review.id ,reviewer: @user_share.review.reviewer.username, content: @user_share.review.content, rating: @user_share.review.rating, review_comments: @user_share.review.review_comments}, link: @user_share.link}
+
+    render json: {status: "success", action: "get_user_share", user_share: serialized_user_share}, status: 200
+  end
+
+  def all_user_shares_for_link
+    ## expected params ####
+    # link: {
+        # :id
+    # }
+
+    link_id_from_params = strong_all_user_shares_for_link_params[:id]
+    @link = Link.find(link_id_from_params)
+
+    if !@link
+      render json: {status: "failure", action: "all_user_shares_for_link", details: "link not found (by id)"}, status: 200
+      return
+    end
+
+    serialized_user_shares = []
+
+    @link.user_shares.each do |u_s|
+      to_go = {id: u_s.id, user: u_s.user.username, review: {id: u_s.review.id ,reviewer: u_s.review.reviewer.username, content: u_s.review.content, rating: u_s.review.rating, review_comments: u_s.review.review_comments}, link: u_s.link}
+      serialized_user_shares.push(to_go)
+    end
+
+    render json: {status: "success", action: "all_user_shares_for_link", link: @link, user_shares: serialized_user_shares}, status: 200
+  end
+
   def construct_user_share
     ## expected params ####
     # user_share: {
@@ -94,7 +139,58 @@ class UserSharesController < ApplicationController
 
     @user_share = UserShare.find(user_share_id_from_params)
 
-    # if only share associated with the link, then @link.update, else make a new link and connect that with this user share and with everything else here
+    @review = @user_share.review
+
+    # update the review
+    if !@review.update(content: review_content_from_params, rating: review_rating_from_params)
+      render json: {status: "failure", action: "update_user_share", errors: @review.errors.full_messages, details: "review update did not validate"}, status: 200
+      return
+    end
+
+    # update link (and link_tag_joins)
+    @link = @user_share.link
+    if @link.user_shares.length == 1
+      # only user_share associated with this link
+      # update link itself
+      # update link-tag-joins
+      if !@link.update(url: link_url_from_params)
+        render json: {status: "failure", action: "update_user_share", errors: @link.errors.full_messages, details: "link update did not validate"}, status: 200
+        return
+      end
+
+      @link_tag_joins = @link.link_tag_joins
+      @link_tag_joins.each do |ltj|
+        ltj.destroy
+      end
+
+      tags_from_params.each do |tag_title|
+        # find the tag to use its id
+        # construct ltj
+        @tag = Tag.find_by(title: tag_title)
+        LinkTagJoin.create(link_id: @link.id, tag_id: @tag.id)
+      end
+
+      render json: {status: "success", action: "update_user_share", link: @link}, status: 200
+    else
+      # not only user_share associated with this link
+      # go through all user_shares associated with this link EXCEPT THIS USER_SHARE
+        # gather all tag IDs
+        # make these tag IDs be only tag IDs connected to the original link
+      # construct new link
+        # with all link_tag_joins given tag ids in params
+      # need to update review's link_id to @new_link.id
+      # need to update user_share's link_id to @new_link.id
+
+      @new_link = Link.new(url: link_url_from_params)
+
+      if !@new_link.save
+        render json: {status: "failure", action: "update_user_share", errors: @new_link.errors.full_messages, details: "link update did not validate"}, status: 200
+        return
+      end
+
+
+      # lessgoooo
+    end
 
   end
 
@@ -105,11 +201,11 @@ class UserSharesController < ApplicationController
     # }
 
     user_share_id_from_params = strong_destroy_user_share_params[:id]
-    byebug
+
     @user_share = UserShare.find(user_share_id_from_params)
 
     if !@user_share
-      render json: {status: "failure", action: "destroy_user_share", user_share: @user_share, details: "user_share not found (by id)"}, status: 200
+      render json: {status: "failure", action: "destroy_user_share", details: "user_share not found (by id)"}, status: 200
       return
     end
 
@@ -138,6 +234,14 @@ class UserSharesController < ApplicationController
 
   private
   #### params-related ####
+  def strong_get_user_share_params
+    params.require(:user_share).permit(:id)
+  end
+
+  def strong_all_user_shares_for_link_params
+    params.require(:link).permit(:id)
+  end
+
   def strong_construct_user_share_params
     params.require(:user_share).permit(:token, :review_information => [:content, :rating], :link_information => [:url], tags: [])
   end

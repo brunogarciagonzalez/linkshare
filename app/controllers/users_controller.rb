@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-  def login
+  def sign_in
     username_from_params = strong_login_params[:username]
     password_from_params = strong_login_params[:password]
     # need to turn password string into bcrypt hash
@@ -38,7 +38,7 @@ class UsersController < ApplicationController
       token = generate_token(@user)
       render json: {status: "success", action: "construct_account", user: @user, token: token}, status: 200
     else
-      render json: {status: "failure", action: "construct_account", errors: @user.errors.full_messages}, status: 200
+      render json: {status: "failure", action: "construct_account", details: "account did not validate", errors: @user.errors.full_messages}, status: 200
     end
   end
 
@@ -71,7 +71,7 @@ class UsersController < ApplicationController
     if @user.save
       render json: {status: "success", action: "update_account", user: @user, token: token_from_params}, status: 200
     else
-      render json: {status: "failure", action: "update_account", errors: @user.errors.full_messages}, status: 200
+      render json: {status: "failure", action: "update_account", details: "account did not validate", errors: @user.errors.full_messages}, status: 200
     end
 
   end

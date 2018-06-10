@@ -3,6 +3,16 @@ class TagsController < ApplicationController
     # return all tags, sorted alphabetically
     @tags = Tag.order('title ASC')
 
+    serialized_tags = []
+
+    @tags.each do |t|
+      to_go = {tag: t, links: []}
+      t.links.each do |link|
+        to_go[:links].push(link)
+      end
+      serialized_tags.push(to_go)
+    end
+
     render json: {status: "success", action: "all_tags", tags: @tags}, status: 200
   end
 
@@ -11,7 +21,7 @@ class TagsController < ApplicationController
     @tag = Tag.find(tag_id_from_params)
     byebug
     if @tag
-      render json: {status: "success", action: "get_tag", tag: @tag}, status: 200
+      render json: {status: "success", action: "get_tag", tag: @tag, tag_comments: @tag.tag_comments}, status: 200
     else
       render json: {status: "failure", action: "get_tag", details: "tag not found (by id)"}, status: 200
     end
@@ -26,7 +36,7 @@ class TagsController < ApplicationController
     if @tag.save
       render json: {status: "success", action: "construct_tag", tag: @tag}
     else
-      render json: {status: "failure", errors: @tag.errors.full_messages}
+      render json: {status: "failure", details: "tag did not validate", errors: @tag.errors.full_messages}
     end
   end
 
@@ -69,7 +79,7 @@ class TagsController < ApplicationController
     if @tag.update(title: format_title(new_tag_title_from_params))
       render json: {status: "success", action:"update_tag", tag: @tag}, status: 200
     else
-      render json: {status: "failure", action:"update_tag", errors: @tag.errors.full_messages}, status: 200
+      render json: {status: "failure", action:"update_tag", details: "tag did not validate", errors: @tag.errors.full_messages}, status: 200
     end
   end
 
