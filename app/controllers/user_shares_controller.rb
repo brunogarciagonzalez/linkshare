@@ -70,13 +70,21 @@ class UserSharesController < ApplicationController
 
 
 
-    # have to produce X.new for every one of the things, and then use .valid? on all, then if all of them are valid move forward, else send back a detailed errors list for use in updating form
+    # have to produce X.new & instance.valid? for every one of the models to be made,
+    # so that all logic happens together if correct
+    # or no logic happens at all if any error
+     # if all of them are valid move forward,
+     # else send back a detailed errors list for use in updating form
+
     temp_link = Link.new(url: link_url_from_params)
     temp_review = Review.new(reviewer_id: user_id, content: review_content_from_params, rating: review_rating_from_params)
 
+    # load the instances up with errors (if any).
+    # since the following if statement may not populate all errors due to nature of an || statement
+
     temp_link.valid?
     temp_review.valid?
-    byebug
+
     if !temp_link.valid? ||
       !tags_from_params.length == 0 ||
       !temp_review.valid?
@@ -84,52 +92,25 @@ class UserSharesController < ApplicationController
       return
     end
 
-
-    byebug
-
-
-
-
-
-
-
-
-
-
-
-
     # if link not in database, persist the link in the database
-    if !@link = Link.find_or_create_by(url: link_url_from_params)
-      render json: {status: "failure", action: "construct_user_share", details: "link did not validate", errors: @review.errors.full_messages, token: token_from_params}, status: 200
-      return
-    end
+    @link = Link.find_or_create_by(url: link_url_from_params)
 
     # persist link-tag-joins in the database
-      # should be an array of tags
+    # only if link_tag_join doesn't already exists
     tags_from_params.each do |tag|
       @tag = Tag.find_by(title: tag)
 
-      # only if link_tag_join doesn't already exists
       if !LinkTagJoin.find_by(link_id: @link.id, tag_id: @tag.id)
         LinkTagJoin.create(tag_id: @tag.id, link_id: @link.id)
       end
     end
 
     # persist the review in the database
-    @review = Review.new(reviewer_id: user_id, link_id: @link.id, content: review_content_from_params, rating: review_rating_from_params)
-
-    if !@review.save
-        render json: {status: "failure", action: "construct_user_share", details: "review did not validate", errors: @review.errors.full_messages, token: token_from_params}, status: 200
-      return
-    end
+    @review = Review.create(reviewer_id: user_id, link_id: @link.id, content: review_content_from_params, rating: review_rating_from_params)
 
     # persist the use-share in the database
-    @user_share = UserShare.new(user_id: user_id, link_id: @link.id, review_id: @review.id)
+    @user_share = UserShare.create(user_id: user_id, link_id: @link.id, review_id: @review.id)
 
-    if !@user_share.save
-        render json: {status: "failure", action: "construct_user_share", details: "user_share did not validate", errors: @user_share.errors.full_messages, token: token_from_params}, status: 200
-      return
-    end
     # update review and any others with user-share
     @review.user_share_id = @user_share.id
     @review.save
