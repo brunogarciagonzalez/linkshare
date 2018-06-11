@@ -76,6 +76,10 @@ class UserSharesController < ApplicationController
      # if all of them are valid move forward,
      # else send back a detailed errors list for use in updating form
 
+    if !(link_url_from_params.include?("http"))
+      link_url_from_params = "http://" + link_url_from_params
+    end
+
     temp_link = Link.new(url: link_url_from_params)
     temp_review = Review.new(reviewer_id: user_id, content: review_content_from_params, rating: review_rating_from_params)
 
@@ -115,6 +119,11 @@ class UserSharesController < ApplicationController
     @review.user_share_id = @user_share.id
     @review.save
 
+    tags_from_params.each do |tag|
+      @tag = Tag.find_by(title: tag)
+
+      UserShareTagJoin.create(tag_id: @tag.id, user_share_id: @user_share.id)
+    end
 
 
     render json: {status: "success", action: "construct_user_share", user_share: @user_share, review: @review, link: @link, token: token_from_params}, status: 200
