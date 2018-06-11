@@ -9,7 +9,7 @@ class UserSharesController < ApplicationController
 
     user_share_id_from_params = strong_get_user_share_params[:id]
 
-    @user_share = UserShare.find(user_share_id_from_params)
+    @user_share = UserShare.find_by(id: user_share_id_from_params)
 
     if !@user_share
       render json: {status: "failure", action: "get_user_share", details: "user_share not found (by id)"}, status: 200
