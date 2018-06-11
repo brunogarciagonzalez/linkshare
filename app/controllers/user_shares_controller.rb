@@ -69,6 +69,35 @@ class UserSharesController < ApplicationController
     user_id = get_user_id_from_token(token_from_params)
 
 
+
+    # have to produce X.new for every one of the things, and then use .valid? on all, then if all of them are valid move forward, else send back a detailed errors list for use in updating form
+    temp_link = Link.new(url: link_url_from_params)
+    temp_review = Review.new(reviewer_id: user_id, content: review_content_from_params, rating: review_rating_from_params)
+
+    temp_link.valid?
+    temp_review.valid?
+    byebug
+    if !temp_link.valid? ||
+      !tags_from_params.length == 0 ||
+      !temp_review.valid?
+      render json: {status: "failure", action: "construct_user_share", link_errors: temp_link.errors.full_messages, review_errors: temp_review.errors.full_messages, token: token_from_params}, status: 200
+      return
+    end
+
+
+    byebug
+
+
+
+
+
+
+
+
+
+
+
+
     # if link not in database, persist the link in the database
     if !@link = Link.find_or_create_by(url: link_url_from_params)
       render json: {status: "failure", action: "construct_user_share", details: "link did not validate", errors: @review.errors.full_messages, token: token_from_params}, status: 200
