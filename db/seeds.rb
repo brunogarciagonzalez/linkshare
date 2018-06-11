@@ -17,3 +17,5 @@ Review.create(user_share_id: 1, reviewer_id: 1, link_id: 1, content: "I have bee
 ReviewComment.create(review_id: 1, review_commenter_id: 2, content: "Nice review.")
 # UserShare(id: integer, user_id: integer, review_id: integer, link_id: integer)
 UserShare.create(user_id: 1, review_id: 1, link_id: 1)
+# UserShareTagJoin(id: integer, user_share_id: integer, tag_id: integer)
+UserShareTagJoin.create(user_share_id: 1, tag_id: 1)

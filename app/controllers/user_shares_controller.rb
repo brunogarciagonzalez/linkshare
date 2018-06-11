@@ -16,7 +16,7 @@ class UserSharesController < ApplicationController
       return
     end
 
-    serialized_user_share = {id: @user_share.id, user: @user_share.user.username, review: {id: @user_share.review.id ,reviewer: @user_share.review.reviewer.username, content: @user_share.review.content, rating: @user_share.review.rating, review_comments: @user_share.review.review_comments}, link: @user_share.link}
+    serialized_user_share = {id: @user_share.id, user: @user_share.user.username, date: @user_share.updated_at, tags: @user_share.tags, review: {id: @user_share.review.id ,reviewer: @user_share.review.reviewer.username, content: @user_share.review.content, rating: @user_share.review.rating, review_comments: @user_share.review.review_comments}, link: @user_share.link}
 
     render json: {status: "success", action: "get_user_share", user_share: serialized_user_share}, status: 200
   end
