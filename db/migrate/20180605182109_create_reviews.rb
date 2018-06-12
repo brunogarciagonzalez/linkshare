@@ -6,7 +6,8 @@ class CreateReviews < ActiveRecord::Migration[5.1]
       t.integer :user_share_id
       t.text :content
       t.integer :rating
-      t.boolean :active, default: true
+      t.boolean :user_deactivation, default: false
+      t.boolean :admin_deactivation, default: false
 
       t.timestamps
     end

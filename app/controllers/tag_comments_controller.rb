@@ -33,7 +33,7 @@ class TagCommentsController < ApplicationController
     if @tag_comment.save
       render json: {status: "success", action: "construct_tag_comment", tag_comment: @tag_comment, tag: @tag_comment.tag}
     else
-      render json: {status: "failure", action: "construct_tag_comment", errors: @tag_comment.erros.full_messages}
+      render json: {status: "failure", action: "construct_tag_comment", details: "tag_comment did not validate", errors: @tag_comment.erros.full_messages}
     end
   end
 
@@ -48,7 +48,7 @@ class TagCommentsController < ApplicationController
     if @tag_comment.update(content: new_tag_comment_content_from_params)
       render json: {status: "success", action:"update_tag_comment", tag: @tag_comment.tag, tag_comment: @tag_comment}, status: 200
     else
-      render json: {status: "failure", action:"update_tag_comment", errors: @tag_comment.errors.full_messages}, status: 200
+      render json: {status: "failure", action:"update_tag_comment", details: "tag_comment did not validate", errors: @tag_comment.errors.full_messages}, status: 200
     end
   end
 
@@ -61,7 +61,7 @@ class TagCommentsController < ApplicationController
     if @tag_comment
 
       @tag_comment.destroy
-      
+
       render json: {status: "success", action: "destroy_tag_comment", tag: @tag_comment.tag, tag_comment: @tag_comment}, status: 200
     else
       render json: {status: "failure", action: "destroy_tag", details: "tag_comment not found (by id)"}, status: 200
