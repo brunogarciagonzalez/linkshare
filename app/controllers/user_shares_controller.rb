@@ -249,7 +249,7 @@ class UserSharesController < ApplicationController
 
       link_user_shares.each do |u_s|
         u_s.tags.each do |tag|
-          tags_for_old_link << tag.id
+          tags_for_old_link << tag
         end
       end
 
@@ -258,6 +258,7 @@ class UserSharesController < ApplicationController
       end
 
       tags_for_old_link.each do |tag|
+        
         LinkTagJoin.create(tag_id: tag.id, link_id: @link.id)
       end
 
