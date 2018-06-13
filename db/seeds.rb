@@ -48,9 +48,9 @@ Tag.create(title: "Archaeology")
 Tag.create(title: "Psychology")
 Tag.create(title: "Dictionaries")
 
-Link.create(url: "https://www.x-cannabis.com")
-Link.create(url: "https://www.google.com")
-Link.create(url: "https://www.bing.com")
+Link.create(url: "https://x-cannabis.com")
+Link.create(url: "https://google.com")
+Link.create(url: "https://bing.com")
 
 # UserShare 1:
 UserShare.create(user_id: 1, review_id: 1, link_id: 1)
