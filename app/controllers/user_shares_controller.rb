@@ -76,9 +76,19 @@ class UserSharesController < ApplicationController
      # if all of them are valid move forward,
      # else send back a detailed errors list for use in updating form
 
-    if !(link_url_from_params.include?("http"))
-      link_url_from_params = "http://" + link_url_from_params
-    end
+     if !(link_url_from_params.include?("http"))
+       link_url_from_params = "https://" + link_url_from_params
+     else
+       if !(link_url_from_params.include?("https"))
+         # split it at "//"
+         b = link_url_from_params.split("://")[1]
+         link_url_from_params = "https://" + b
+       end
+     end
+
+     if link_url_from_params.include?("www.")
+       link_url_from_params = link_url_from_params.split("www.").join("")
+     end
 
     temp_link = Link.new(url: link_url_from_params)
     temp_review = Review.new(reviewer_id: user_id, content: review_content_from_params, rating: review_rating_from_params)
@@ -169,7 +179,13 @@ class UserSharesController < ApplicationController
 
 
     if !(link_url_from_params.include?("http"))
-      link_url_from_params = "http://" + link_url_from_params
+      link_url_from_params = "https://" + link_url_from_params
+    else
+      if !(link_url_from_params.include?("https"))
+        # split it at "//"
+        b = link_url_from_params.split("://")[1]
+        link_url_from_params = "https://" + b
+      end
     end
 
     temp_link = Link.new(url: link_url_from_params)
@@ -202,22 +218,20 @@ class UserSharesController < ApplicationController
       UserShareTagJoin.create(user_share_id: @user_share.id,tag_id: tag.id)
     end
 
-    # update review's link_id to @new_link.id
-    @review = @user_share.review
-
     # update the review
+    @review = @user_share.review
     @review.update(content: review_content_from_params, rating: review_rating_from_params)
 
 
     # update link (and link_tag_joins)
-    @link = @user_share.link
-    if @link.user_shares.length == 1
+    @old_link = @user_share.link
+    if @old_link.user_shares.length == 1
       # only user_share associated with this link
       # update link itself
       # update link-tag-joins
-      @link.update(url: link_url_from_params)
+      @old_link.update(url: link_url_from_params)
 
-      @link.link_tag_joins.each do |ltj|
+      @old_link.link_tag_joins.each do |ltj|
         ltj.destroy
       end
 
@@ -237,50 +251,72 @@ class UserSharesController < ApplicationController
         # gather all tag IDs
         # make these tag IDs be only tag IDs connected to the original link
 
-      link_user_shares = []
+      other_user_shares_of_old_link = []
 
-      @link.user_shares.each do |u_s|
+      @old_link.user_shares.each do |u_s|
         if u_s.id != @user_share.id
-          link_user_shares << u_s
+          other_user_shares_of_old_link << u_s
         end
       end
 
-      tags_for_old_link = []
+      tag_ids_for_old_link = []
 
-      link_user_shares.each do |u_s|
+      other_user_shares_of_old_link.each do |u_s|
         u_s.tags.each do |tag|
-          tags_for_old_link << tag
+          tag_ids_for_old_link << tag.id
         end
       end
 
-      @link.link_tag_joins.each do |l_t_j|
+      @old_link.link_tag_joins.each do |l_t_j|
         l_t_j.destroy
       end
 
-      tags_for_old_link.each do |tag|
+      # unique tags_for_old_link
+      unique_tag_ids_for_old_link = tag_ids_for_old_link.uniq
 
-        LinkTagJoin.create(tag_id: tag.id, link_id: @link.id)
-      end
+      if @old_link.url != link_url_from_params
 
-      # construct new link
+        unique_tag_ids_for_old_link.each do |tagID|
+          tag = Tag.find(tagID)
+          LinkTagJoin.create(tag_id: tag.id, link_id: @old_link.id)
+        end
+
+        # construct new link
         # with all link_tag_joins given tag ids in params
-      # need to update review's link_id to @new_link.id
-      # need to update user_share's link_id to @new_link.id
-      # also user_share_tag_joins
+        # need to update review's link_id to @new_link.id
+        # need to update user_share's link_id to @new_link.id
+        # also user_share_tag_joins
 
-      @new_link = Link.create(url: link_url_from_params)
+        @new_link = Link.create(url: link_url_from_params)
 
-      # connect with tags in params
-      tags_from_params.each do |tag_title|
-        tag = Tag.find_by(title: tag_title)
-        LinkTagJoin.create(link_id: @new_link.id, tag_id: tag.id)
+        # connect with tags in params
+        tags_from_params.each do |tag_title|
+          tag = Tag.find_by(title: tag_title)
+          LinkTagJoin.create(link_id: @new_link.id, tag_id: tag.id)
+        end
+
+        # need to update user_share's link_id to @new_link.id
+        @user_share.update(link_id: @new_link.id)
+
+        # update review's link_id to @new_link.id
+        @review.update(link_id: @new_link.id)
+
+      else
+        # add tags from params as LinkTagJoins with @old_link & the tag_id
+        tags_from_params.each do |tag_title|
+          tag = Tag.find_by(title: tag_title)
+          unique_tag_ids_for_old_link << tag.id
+        end
+
+        unique_tag_ids_for_old_link.uniq!
+        unique_tag_ids_for_old_link.each do |tagID|
+          tag = Tag.find(tagID)
+          LinkTagJoin.create(tag_id: tag.id, link_id: @old_link.id)
+        end
+
+        # no need to update user_share's link_id or review's link_id
       end
 
-      # need to update user_share's link_id to @new_link.id
-      @user_share.update(link_id: @new_link.id)
-
-      # update the review
-      @review.update(link_id: @new_link.id)
 
       #render success
       render json: {status: "success", action: "update_user_share", user_share_id: @user_share.id}, status: 200
