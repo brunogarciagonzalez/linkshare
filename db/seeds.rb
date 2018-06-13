@@ -1,10 +1,6 @@
 # User(id: integer, username: string, password_digest: string, email: string)
 User.create(username: "Bruno", password: "1&Password", email: "brunogarciagonzalez@outlook.com")
 User.create(username: "German", password: "2&Password", email: "germanjii@gmail.com")
-# Link(id: integer, url: string)
-Link.create(url: "https://www.x-cannabis.com")
-Link.create(url: "https://www.google.com")
-Link.create(url: "https://www.bing.com")
 # Tag(id: integer, title: string)
 Tag.create(title:"Cannabis")
 Tag.create(title:"Social Media")
@@ -51,20 +47,23 @@ Tag.create(title: "Languages")
 Tag.create(title: "Archaeology")
 Tag.create(title: "Psychology")
 Tag.create(title: "Dictionaries")
-# LinkTagJoin(id: integer, link_id: integer, tag_id: integer)
-LinkTagJoin.create(link_id: 1, tag_id: 1)
-# TagComment(id: integer, tag_id: integer, tag_commenter_id: integer, content: text)
+
+Link.create(url: "https://www.x-cannabis.com")
+Link.create(url: "https://www.google.com")
+Link.create(url: "https://www.bing.com")
+
+# UserShare 1:
+UserShare.create(user_id: 1, review_id: 1, link_id: 1)
+UserShareTagJoin.create(user_share_id: 1, tag_id: 7)
+LinkTagJoin.create(link_id: 1, tag_id: 7)
+Review.create(user_share_id: 1, reviewer_id: 1, link_id: 1, content: "I have been a member of this social network since its first days (roughly). It has upgraded much and with a more active community I look forward to where it goes. I will keep checking in as it grows and will update my review. I think it is a nice niche of a social network.", rating: 8)
+
+# UserShare 2:
+UserShare.create(user_id: 2, review_id: 2, link_id: 1)
+Review.create(user_share_id: 2, reviewer_id: 2, link_id: 1, content: "test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test", rating: 2)
+UserShareTagJoin.create(user_share_id: 2, tag_id: 7)
+
+
 TagComment.create(tag_id: 1, tag_commenter_id: 2, content: "dope")
 TagComment.create(tag_id: 1, tag_commenter_id: 1, content: "ganja")
-# Review(id: integer, user_share_id: integer, reviewer_id: integer, link_id: integer, content: text, rating: integer)
-Review.create(user_share_id: 1, reviewer_id: 1, link_id: 1, content: "I have been a member of this social network since its first days (roughly). It has upgraded much and with a more active community I look forward to where it goes. I will keep checking in as it grows and will update my review. I think it is a nice niche of a social network.", rating: 8)
-Review.create(user_share_id: 2, reviewer_id: 2, link_id: 1, content: "test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test", rating: 2)
-# ReviewComment(id: integer, review_id: integer, review_commenter_id: integer, content: text)
 ReviewComment.create(review_id: 1, review_commenter_id: 2, content: "Nice review.")
-# UserShare(id: integer, user_id: integer, review_id: integer, link_id: integer)
-UserShare.create(user_id: 1, review_id: 1, link_id: 1)
-UserShare.create(user_id: 2, review_id: 2, link_id: 1)
-
-# UserShareTagJoin(id: integer, user_share_id: integer, tag_id: integer)
-UserShareTagJoin.create(user_share_id: 1, tag_id: 7)
-UserShareTagJoin.create(user_share_id: 2, tag_id: 7)
