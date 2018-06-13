@@ -49,7 +49,7 @@ class LinksController < ApplicationController
         end
 
         avg_rating = (sum / link.reviews.length.to_f).round(1)
-        serialized_links << {link: link, avg_rating: avg_rating}
+        serialized_links << {link: link, avg_rating: avg_rating, num_reviews: link.reviews.length}
       end
 
       # sort by rating
