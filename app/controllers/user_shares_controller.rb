@@ -212,7 +212,6 @@ class UserSharesController < ApplicationController
     # update link (and link_tag_joins)
     @link = @user_share.link
     if @link.user_shares.length == 1
-      byebug
       # only user_share associated with this link
       # update link itself
       # update link-tag-joins
