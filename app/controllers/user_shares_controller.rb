@@ -212,6 +212,7 @@ class UserSharesController < ApplicationController
     # update link (and link_tag_joins)
     @link = @user_share.link
     if @link.user_shares.length == 1
+      byebug
       # only user_share associated with this link
       # update link itself
       # update link-tag-joins
@@ -258,7 +259,7 @@ class UserSharesController < ApplicationController
       end
 
       tags_for_old_link.each do |tag|
-        
+
         LinkTagJoin.create(tag_id: tag.id, link_id: @link.id)
       end
 
