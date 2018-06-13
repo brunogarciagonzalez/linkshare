@@ -32,10 +32,31 @@ class LinksController < ApplicationController
   def all_links_for_tag
     tag_id_from_params = strong_all_links_for_tag_params[:id]
 
-    @tag = Tag.find(tag_id_from_params)
+    @tag = Tag.find_by(id: tag_id_from_params)
 
     if @tag
-      render json: {status: "success", action: "all_links_for_tag", tag: @tag, links: @tag.links}, status: 200
+    # compute link avg-rating for each
+      # keep this in a variable
+    # sort links by rating
+    # serialize output as [...{link: link_obj, avg_rating: X}]
+    # add search bar in front end just because
+
+      serialized_links = []
+      @tag.links.each do |link|
+        sum = 0;
+        link.reviews.each do |review|
+          sum += review.rating
+        end
+
+        avg_rating = (sum / link.reviews.length.to_f).round(1)
+        serialized_links << {link: link, avg_rating: avg_rating}
+      end
+
+      # sort by rating
+      sorted_serialized_links = serialized_links.sort { |x,y| y[:avg_rating] <=> x[:avg_rating]}
+
+
+      render json: {status: "success", action: "all_links_for_tag", tag: @tag, links: sorted_serialized_links}, status: 200
     else
       render json: {status: "failure", action: "all_links_for_tag", details: "tag not found (by id)"}, status: 200
     end
