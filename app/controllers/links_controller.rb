@@ -35,6 +35,7 @@ class LinksController < ApplicationController
       serialized_review_comments = []
       review.review_comments.each do |r_c|
         serialized_review_comments << {
+          id: r_c.id,
           review_commenter: {id: r_c.review_commenter.id, username: r_c.review_commenter.username},
           updated_at: r_c.updated_at,
           content: r_c.content
