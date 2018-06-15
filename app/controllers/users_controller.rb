@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  skip_before_action :authorized, only: [:sign_in, :construct_account]
 
   def sign_in
     username_from_params = strong_login_params[:username]

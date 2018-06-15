@@ -1,5 +1,6 @@
 class ReviewCommentsController < ApplicationController
   # review_id: nil, review_commenter_id: nil, content: nil
+  skip_before_action :authorized, only: [:all_comments_for_review, :get_review_comment]
 
   def all_comments_for_review
     ## expected params ####

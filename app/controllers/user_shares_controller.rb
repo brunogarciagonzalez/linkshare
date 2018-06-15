@@ -1,5 +1,6 @@
 class UserSharesController < ApplicationController
   # user_id: nil, review_id: nil, link_id: nil, active: true
+  skip_before_action :authorized, only: [:get_user_share, :all_user_shares_for_link]
 
   def get_user_share
     ## expected params ####

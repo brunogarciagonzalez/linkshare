@@ -1,5 +1,6 @@
 class LinksController < ApplicationController
   # url: nil, active: true
+  skip_before_action :authorized
 
   def all_links
     @links = Link.all
