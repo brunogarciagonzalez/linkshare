@@ -1,6 +1,6 @@
 class ReviewCommentsController < ApplicationController
   # review_id: nil, review_commenter_id: nil, content: nil
-  skip_before_action :authorized, only: [:all_comments_for_review, :get_review_comment]
+  skip_before_action :authorized, only: [:all_comments_for_review, :get_review_comment, :construct_review_comment]
 
   def all_comments_for_review
     ## expected params ####
@@ -59,6 +59,31 @@ class ReviewCommentsController < ApplicationController
       review_comment_information: serialized_review_comment, review_information: serialized_review}, status: 200
   end
 
+  def construct_review_comment
+    ## expected params ####
+    # review_comment: {
+        # :token
+        # :review_id
+        # :content
+    # }
+
+    token_from_params = strong_construct_review_comment_params[:token]
+    user_id = get_user_id_from_token(token_from_params)
+
+    review_id_from_params = strong_construct_review_comment_params[:review_id]
+    content_from_params = strong_construct_review_comment_params[:content]
+
+    @review_comment = ReviewComment.new(review_commenter_id: user_id, review_id: review_id_from_params, content: content_from_params)
+
+
+    if @review_comment.save
+      render json: {status: "success", action: "construct_review_comment", review_comment: @review_comment}, status: 200
+    else
+      render json: {status: "failure", action: "construct_review_comment", review_comment: @review_comment, errors: @review_comment.errors.full_messages}, status: 200
+    end
+
+  end
+
   private
   #### params-related ####
   def strong_all_comments_for_review_params
@@ -67,5 +92,18 @@ class ReviewCommentsController < ApplicationController
 
   def strong_get_review_comment_params
     params.require(:review_comment).permit(:id)
+  end
+
+  def strong_construct_review_comment_params
+    params.require(:review_comment).permit(:token, :review_id, :content)
+  end
+
+  #### helper functions ####
+  def get_user_id_from_token(token)
+    secret = "secret"
+    # decode payload: [{user_id: user.id}, {alg...}]
+    payload = JWT.decode(token,secret, "HS256")
+    # find user
+    payload[0]["user_id"]
   end
 end
