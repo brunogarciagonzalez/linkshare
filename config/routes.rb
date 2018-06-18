@@ -37,5 +37,6 @@ Rails.application.routes.draw do
   #### review_comment-related ####
   post "/review-comments/get", to: 'review_comments#get_review_comment'
   post "/review-comments/for_review", to: 'review_comments#all_comments_for_review'
+  post "/review-comments/construct", to: 'review_comments#construct_review_comment'
 
 end
