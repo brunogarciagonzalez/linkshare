@@ -19,7 +19,7 @@ class ApplicationController < ActionController::API
   end
 
   def logged_in?
-   !!user
+   !!@user
   end
 
   def authorized
