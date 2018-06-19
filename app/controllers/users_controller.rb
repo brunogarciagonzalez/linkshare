@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  skip_before_action :authorized, only: [:sign_in, :construct_account]
+  skip_before_action :authorized, only: [:sign_in, :construct_account, :get_dashboard, :get_account]
 
   def sign_in
     username_from_params = strong_login_params[:username]
@@ -51,6 +51,29 @@ class UsersController < ApplicationController
       render json: {status: "success", action: "get_account", user: @user}, status: 200
     else
       render json: {status: "failure", action: "get_account", details: "user not found (by id)"}, status: 200
+    end
+  end
+
+  def get_dashboard
+    token_from_params = strong_get_dashboard_params[:token]
+    @user = get_user_from_token(token_from_params)
+
+    # serialize user_shares
+    serialized_user_shares = []
+    @user.user_shares.each do |u_s|
+      serialized_user_shares << {id: u_s.id, link: u_s.link, review: u_s.review, last_update: u_s.updated_at}
+    end
+
+    # review_comments count
+
+
+    # review_comments notifications!
+
+    if @user
+      render json: {status: "success", action: "get_dashboard", user: @user, linkshares: serialized_user_shares, num_tag_comments: @user.tag_comments.length, num_review_comments: @user.review_comments.length}, status: 200
+    else
+      render json: {status: "failure", action: "get_dashboard", details: "account not found (by id)"}, status: 200
+
     end
   end
 
@@ -206,6 +229,10 @@ class UsersController < ApplicationController
     params.require(:user).permit(:id)
   end
 
+  def strong_get_dashboard_params
+    params.require(:user).permit(:token)
+  end
+
   def strong_deactivate_account_params
     params.require(:user).permit(:username, :password, :email, :token)
   end
@@ -223,7 +250,6 @@ class UsersController < ApplicationController
     secret = "secret"
     # decode payload: [{user_id: user.id}, {alg...}]
     payload = JWT.decode(token,secret, "HS256")
-    byebug
     # find user
     User.find(payload[0]["user_id"])
   end
