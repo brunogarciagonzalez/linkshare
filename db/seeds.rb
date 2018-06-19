@@ -80,7 +80,7 @@ UserShareTagJoin.create(user_share_id: 4, tag_id: 1)
 UserShare.create(user_id: 1, review_id: 5, link_id: 2)
 UserShareTagJoin.create(user_share_id: 5, tag_id: 1)
 LinkTagJoin.create(link_id: 2, tag_id: 1)
-Review.create(user_share_id: 1, reviewer_id: 1, link_id: 2, content: "example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example", rating: 5)
+Review.create(user_share_id: 5, reviewer_id: 1, link_id: 2, content: "example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example", rating: 5)
 
 UserShare.create(user_id: 2, review_id: 6, link_id: 2)
 Review.create(user_share_id: 6, reviewer_id: 2, link_id: 2, content: "test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test", rating: 10)
@@ -102,7 +102,7 @@ LinkTagJoin.create(link_id: 3, tag_id: 1)
 Review.create(user_share_id: 9, reviewer_id: 1, link_id: 3, content: "example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example", rating: 3)
 
 UserShare.create(user_id: 2, review_id: 10, link_id: 3)
-Review.create(user_share_id: 6, reviewer_id: 2, link_id: 3, content: "test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test", rating: 10)
+Review.create(user_share_id: 10, reviewer_id: 2, link_id: 3, content: "test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test", rating: 10)
 UserShareTagJoin.create(user_share_id: 10, tag_id: 1)
 
 UserShare.create(user_id: 3, review_id: 11, link_id: 3)

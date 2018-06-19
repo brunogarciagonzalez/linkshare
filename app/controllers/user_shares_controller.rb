@@ -1,6 +1,6 @@
 class UserSharesController < ApplicationController
   # user_id: nil, review_id: nil, link_id: nil, active: true
-  skip_before_action :authorized, only: [:get_user_share, :all_user_shares_for_link, :construct_user_share]
+  skip_before_action :authorized, only: [:get_user_share, :all_user_shares_for_link, :construct_user_share, :update_user_share, :destroy_user_share]
 
   def get_user_share
     ## expected params ####
@@ -330,6 +330,7 @@ class UserSharesController < ApplicationController
     # user_share: {
         # :id
     # }
+    byebug
 
     user_share_id_from_params = strong_destroy_user_share_params[:id]
 
@@ -348,6 +349,12 @@ class UserSharesController < ApplicationController
       @link_tag_join.destroy
 
       @user_share.link.destroy
+    end
+
+    UserShareTagJoin.all.each do |ustj|
+      if ustj.user_share_id == @user_share.id
+        ustj.destroy
+      end
     end
 
     # review and review-comments (see users_controller#destroy)
@@ -378,7 +385,7 @@ class UserSharesController < ApplicationController
   end
 
   def strong_destroy_user_share_params
-    params.require(:user_share).permit(:id)
+    params.require("user-share").permit(:id)
   end
 
   def strong_update_user_share_params

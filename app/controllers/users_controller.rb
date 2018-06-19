@@ -58,12 +58,13 @@ class UsersController < ApplicationController
     token_from_params = strong_get_dashboard_params[:token]
     @user = get_user_from_token(token_from_params)
 
-    # serialize user_shares
-    serialized_user_shares = []
-    @user.user_shares.each do |u_s|
-      serialized_user_shares << {id: u_s.id, link: u_s.link, review: u_s.review, last_update: u_s.updated_at}
-    end
+    # serialize user_shares, sorted by updated_at
+    sorted_user_shares = @user.user_shares.order('updated_at DESC')
 
+    serialized_user_shares = []
+    sorted_user_shares.each do |u_s|
+      serialized_user_shares << {id: u_s.id, link: u_s.link, content: u_s.review.content, rating: u_s.review.rating, tags: u_s.tags, last_update: u_s.updated_at}
+    end
     # review_comments count
 
 
