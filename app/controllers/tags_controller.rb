@@ -1,4 +1,6 @@
 class TagsController < ApplicationController
+  skip_before_action :authorized
+
   def all_tags
     # return all tags, sorted alphabetically
     @tags = Tag.order('title ASC')

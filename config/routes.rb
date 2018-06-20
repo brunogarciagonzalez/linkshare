@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   post '/users/update', to: 'users#update_account'
   post '/users/destroy', to: 'users#destroy_account'
   post '/users/get', to: 'users#get_account'
+  post '/users/get_dashboard', to: 'users#get_dashboard'
   post '/users/deactivate', to: 'users#deactivate_account'
 
   #### user_share-related ####
@@ -37,5 +38,6 @@ Rails.application.routes.draw do
   #### review_comment-related ####
   post "/review-comments/get", to: 'review_comments#get_review_comment'
   post "/review-comments/for_review", to: 'review_comments#all_comments_for_review'
+  post "/review-comments/construct", to: 'review_comments#construct_review_comment'
 
 end

@@ -1,7 +1,11 @@
 # User(id: integer, username: string, password_digest: string, email: string)
-User.create(username: "Bruno", password: "1&Password", email: "brunogarciagonzalez@outlook.com")
-User.create(username: "German", password: "2&Password", email: "germanjii@gmail.com")
+User.create(username: "user1", password: "1&Password", email: "user1@gmail.com")
+User.create(username: "user2", password: "2&Password", email: "user2@gmail.com")
+User.create(username: "user3", password: "3&Password", email: "user3@gmail.com")
+User.create(username: "user4", password: "4&Password", email: "user4@gmail.com")
+User.create(username: "user5", password: "5&Password", email: "user5@gmail.com")
 # Tag(id: integer, title: string)
+Tag.create(title: "Example")
 Tag.create(title:"Cannabis")
 Tag.create(title:"Social Media")
 Tag.create(title: "Features")
@@ -48,22 +52,68 @@ Tag.create(title: "Archaeology")
 Tag.create(title: "Psychology")
 Tag.create(title: "Dictionaries")
 
-Link.create(url: "https://x-cannabis.com")
 Link.create(url: "https://google.com")
+Link.create(url: "https://yahoo.com")
 Link.create(url: "https://bing.com")
+Link.create(url: "https://linkshare.io")
 
-# UserShare 1:
+# UserShares for link 1:
 UserShare.create(user_id: 1, review_id: 1, link_id: 1)
-UserShareTagJoin.create(user_share_id: 1, tag_id: 7)
-LinkTagJoin.create(link_id: 1, tag_id: 7)
-Review.create(user_share_id: 1, reviewer_id: 1, link_id: 1, content: "I have been a member of this social network since its first days (roughly). It has upgraded much and with a more active community I look forward to where it goes. I will keep checking in as it grows and will update my review. I think it is a nice niche of a social network.", rating: 8)
+UserShareTagJoin.create(user_share_id: 1, tag_id: 1)
+LinkTagJoin.create(link_id: 1, tag_id: 1)
+Review.create(user_share_id: 1, reviewer_id: 1, link_id: 1, content: "example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example", rating: 8)
 
-# UserShare 2:
 UserShare.create(user_id: 2, review_id: 2, link_id: 1)
-Review.create(user_share_id: 2, reviewer_id: 2, link_id: 1, content: "test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test", rating: 2)
-UserShareTagJoin.create(user_share_id: 2, tag_id: 7)
+Review.create(user_share_id: 2, reviewer_id: 2, link_id: 1, content: "test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test", rating: 5)
+UserShareTagJoin.create(user_share_id: 2, tag_id: 1)
 
+UserShare.create(user_id: 3, review_id: 3, link_id: 1)
+Review.create(user_share_id: 3, reviewer_id: 3, link_id: 1, content: "hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello", rating: 10)
+UserShareTagJoin.create(user_share_id: 3, tag_id: 1)
 
+UserShare.create(user_id: 4, review_id: 4, link_id: 1)
+Review.create(user_share_id: 4, reviewer_id: 4, link_id: 1, content: "one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more", rating: 1)
+UserShareTagJoin.create(user_share_id: 4, tag_id: 1)
+
+# UserShares for link 2:
+
+UserShare.create(user_id: 1, review_id: 5, link_id: 2)
+UserShareTagJoin.create(user_share_id: 5, tag_id: 1)
+LinkTagJoin.create(link_id: 2, tag_id: 1)
+Review.create(user_share_id: 5, reviewer_id: 1, link_id: 2, content: "example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example", rating: 5)
+
+UserShare.create(user_id: 2, review_id: 6, link_id: 2)
+Review.create(user_share_id: 6, reviewer_id: 2, link_id: 2, content: "test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test", rating: 10)
+UserShareTagJoin.create(user_share_id: 6, tag_id: 1)
+
+UserShare.create(user_id: 3, review_id: 7, link_id: 2)
+Review.create(user_share_id: 7, reviewer_id: 3, link_id: 2, content: "hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello", rating: 3)
+UserShareTagJoin.create(user_share_id: 7, tag_id: 1)
+
+UserShare.create(user_id: 4, review_id: 8, link_id: 2)
+Review.create(user_share_id: 8, reviewer_id: 4, link_id: 2, content: "one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more", rating: 1)
+UserShareTagJoin.create(user_share_id: 8, tag_id: 1)
+
+# UserShares for link 3:
+
+UserShare.create(user_id: 1, review_id: 9, link_id: 3)
+UserShareTagJoin.create(user_share_id: 9, tag_id: 1)
+LinkTagJoin.create(link_id: 3, tag_id: 1)
+Review.create(user_share_id: 9, reviewer_id: 1, link_id: 3, content: "example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example example", rating: 3)
+
+UserShare.create(user_id: 2, review_id: 10, link_id: 3)
+Review.create(user_share_id: 10, reviewer_id: 2, link_id: 3, content: "test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test", rating: 10)
+UserShareTagJoin.create(user_share_id: 10, tag_id: 1)
+
+UserShare.create(user_id: 3, review_id: 11, link_id: 3)
+Review.create(user_share_id: 11, reviewer_id: 3, link_id: 3, content: "hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello", rating: 3)
+UserShareTagJoin.create(user_share_id: 11, tag_id: 1)
+
+UserShare.create(user_id: 4, review_id: 12, link_id: 3)
+Review.create(user_share_id: 12, reviewer_id: 4, link_id: 3, content: "one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more one more", rating: 4)
+UserShareTagJoin.create(user_share_id: 12, tag_id: 1)
+
+# Comments
 TagComment.create(tag_id: 1, tag_commenter_id: 2, content: "dope")
 TagComment.create(tag_id: 1, tag_commenter_id: 1, content: "ganja")
-ReviewComment.create(review_id: 1, review_commenter_id: 2, content: "Nice review.")
+ReviewComment.create(review_id: 1, review_commenter_id: 2, content: "Exemplary review!")
