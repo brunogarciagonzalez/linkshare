@@ -47,10 +47,23 @@ class UsersController < ApplicationController
     user_id_from_params = strong_get_account_params[:id]
     @user = User.find(user_id_from_params)
 
+    # serialize user_shares, sorted by updated_at
+    sorted_user_shares = @user.user_shares.order('updated_at DESC')
+
+    serialized_user_shares = []
+    sorted_user_shares.each do |u_s|
+      serialized_user_shares << {id: u_s.id, link: u_s.link, content: u_s.review.content, rating: u_s.review.rating, tags: u_s.tags, last_update: u_s.updated_at}
+    end
+    # review_comments count
+
+
+    # review_comments notifications!
+
     if @user
-      render json: {status: "success", action: "get_account", user: @user}, status: 200
+      render json: {status: "success", action: "get_account", user: @user, linkshares: serialized_user_shares, num_tag_comments: @user.tag_comments.length, num_review_comments: @user.review_comments.length}, status: 200
     else
-      render json: {status: "failure", action: "get_account", details: "user not found (by id)"}, status: 200
+      render json: {status: "failure", action: "get_account", details: "account not found (by id)"}, status: 200
+
     end
   end
 
