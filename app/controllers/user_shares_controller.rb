@@ -1,7 +1,6 @@
 class UserSharesController < ApplicationController
   # user_id: nil, review_id: nil, link_id: nil, active: true
-  skip_before_action :authorized, only: [:get_user_share, :all_user_shares_for_link, :construct_user_share, :update_user_share, :destroy_user_share]
-
+  skip_before_action :authorized
   def get_user_share
     ## expected params ####
     # user_share: {
@@ -10,6 +9,7 @@ class UserSharesController < ApplicationController
 
     user_share_id_from_params = strong_get_user_share_params[:id]
 
+
     @user_share = UserShare.find_by(id: user_share_id_from_params)
 
     if !@user_share
@@ -17,9 +17,14 @@ class UserSharesController < ApplicationController
       return
     end
 
-    serialized_user_share = {id: @user_share.id, user: {id: @user_share.user.id, username: @user_share.user.username}, date: @user_share.updated_at, tags: @user_share.tags, review: {id: @user_share.review.id ,reviewer: @user_share.review.reviewer.username, content: @user_share.review.content, rating: @user_share.review.rating, review_comments: @user_share.review.review_comments}, link: @user_share.link}
+    if strong_get_user_share_params[:token]
+      serialized_user_share = {id: @user_share.id, current_user_id: get_user_id_from_token(strong_get_user_share_params[:token]), user: {id: @user_share.user.id, username: @user_share.user.username}, date: @user_share.updated_at, tags: @user_share.tags, review: {id: @user_share.review.id ,reviewer: @user_share.review.reviewer.username, content: @user_share.review.content, rating: @user_share.review.rating, review_comments: @user_share.review.review_comments}, link: @user_share.link}
 
-    render json: {status: "success", action: "get_user_share", user_share: serialized_user_share}, status: 200
+    else
+      serialized_user_share = {id: @user_share.id, user: {id: @user_share.user.id, username: @user_share.user.username}, date: @user_share.updated_at, tags: @user_share.tags, review: {id: @user_share.review.id ,reviewer: @user_share.review.reviewer.username, content: @user_share.review.content, rating: @user_share.review.rating, review_comments: @user_share.review.review_comments}, link: @user_share.link}
+
+      render json: {status: "success", action: "get_user_share", user_share: serialized_user_share}, status: 200
+    end
   end
 
   def all_user_shares_for_link
@@ -330,7 +335,6 @@ class UserSharesController < ApplicationController
     # user_share: {
         # :id
     # }
-    byebug
 
     user_share_id_from_params = strong_destroy_user_share_params[:id]
 
@@ -351,10 +355,9 @@ class UserSharesController < ApplicationController
       @user_share.link.destroy
     end
 
-    UserShareTagJoin.all.each do |ustj|
-      if ustj.user_share_id == @user_share.id
+
+    @user_share.user_share_tag_joins.each do |ustj|
         ustj.destroy
-      end
     end
 
     # review and review-comments (see users_controller#destroy)
@@ -373,7 +376,7 @@ class UserSharesController < ApplicationController
   private
   #### params-related ####
   def strong_get_user_share_params
-    params.require(:user_share).permit(:id)
+    params.require(:user_share).permit(:id, :token)
   end
 
   def strong_all_user_shares_for_link_params
@@ -385,7 +388,7 @@ class UserSharesController < ApplicationController
   end
 
   def strong_destroy_user_share_params
-    params.require("user-share").permit(:id)
+    params.require(:user_share).permit(:id)
   end
 
   def strong_update_user_share_params

@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-  skip_before_action :authorized, only: [:sign_in, :construct_account, :get_dashboard, :get_account]
+  skip_before_action :authorized
+  # skip_before_action :authorized, only: [:sign_in, :construct_account, :get_account]
 
   def sign_in
     username_from_params = strong_login_params[:username]
@@ -52,7 +53,13 @@ class UsersController < ApplicationController
 
     serialized_user_shares = []
     sorted_user_shares.each do |u_s|
-      serialized_user_shares << {id: u_s.id, link: u_s.link, content: u_s.review.content, rating: u_s.review.rating, tags: u_s.tags, last_update: u_s.updated_at}
+      # serialize review_comments
+      serialized_review_comments = []
+      u_s.review.review_comments.each do |r_c|
+        serialized_review_comments << {id: r_c.id, content: r_c.content, updated_at: r_c.updated_at, review_commenter: {id: r_c.review_commenter.id, username: r_c.review_commenter.username}}
+      end
+
+      serialized_user_shares << {id: u_s.id, review_comments: serialized_review_comments,link: u_s.link, content: u_s.review.content, rating: u_s.review.rating, tags: u_s.tags, last_update: u_s.updated_at}
     end
     # review_comments count
 
@@ -76,7 +83,13 @@ class UsersController < ApplicationController
 
     serialized_user_shares = []
     sorted_user_shares.each do |u_s|
-      serialized_user_shares << {id: u_s.id, link: u_s.link, content: u_s.review.content, rating: u_s.review.rating, tags: u_s.tags, last_update: u_s.updated_at}
+      # serialize review_comments
+      serialized_review_comments = []
+      u_s.review.review_comments.each do |r_c|
+        serialized_review_comments << {id: r_c.id, content: r_c.content, updated_at: r_c.updated_at, review_commenter: {id: r_c.review_commenter.id, username: r_c.review_commenter.username}}
+      end
+
+      serialized_user_shares << {id: u_s.id, review_comments: serialized_review_comments,link: u_s.link, content: u_s.review.content, rating: u_s.review.rating, tags: u_s.tags, last_update: u_s.updated_at}
     end
     # review_comments count
 

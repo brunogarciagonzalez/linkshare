@@ -1,6 +1,6 @@
 class TagCommentsController < ApplicationController
   # tag_id: nil, tag_commenter_id: nil, content: nil
-  skip_before_action :authorized, only: [:all_comments_for_tag, :get_tag_comment]
+  skip_before_action :authorized
 
   def all_comments_for_tag
     tag_id_from_params = strong_all_comments_for_tag_params[:id]
