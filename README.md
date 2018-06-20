@@ -1,6 +1,6 @@
 # README
 
-LinkShare: Community-based internet exploration
+## LinkShare: Community-based internet exploration
 
 This web application is powered by a Ruby on Rails (API), React, and Semantic UI.
 
