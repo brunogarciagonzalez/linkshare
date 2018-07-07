@@ -247,7 +247,7 @@ class UserSharesController < ApplicationController
         # find the tag to use its id
         # construct ltj
         tag = Tag.find_by(title: tag_title)
-        LinkTagJoin.create(link_id: @link.id, tag_id: tag.id)
+        LinkTagJoin.create(link_id: @old_link.id, tag_id: tag.id)
       end
 
 
