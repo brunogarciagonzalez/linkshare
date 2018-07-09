@@ -40,4 +40,8 @@ Rails.application.routes.draw do
   post "/review-comments/for_review", to: 'review_comments#all_comments_for_review'
   post "/review-comments/construct", to: 'review_comments#construct_review_comment'
 
+
+  #### votes-related ####
+  post "/votes/..."
+
 end
