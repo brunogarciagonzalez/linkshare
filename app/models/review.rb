@@ -8,7 +8,6 @@ class Review < ApplicationRecord
   #### validations ####
   validates :reviewer_id, presence: true
   validates :content, presence: true
-  validates :content, length: { minimum: 240 }
   validates :rating, presence: true
   validates :rating, numericality: { less_than_or_equal_to: 10,  only_integer: true }
   validates :rating, numericality: { more_than_or_equal_to: 1,  only_integer: true }
