@@ -3,6 +3,7 @@ class Review < ApplicationRecord
   belongs_to :reviewer, class_name: 'User'
   has_many :review_comments
   has_one :user_share
+  has_many :votes
 
   #### validations ####
   validates :reviewer_id, presence: true
