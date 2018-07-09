@@ -42,6 +42,5 @@ Rails.application.routes.draw do
 
 
   #### votes-related ####
-  post "/votes/..."
 
 end
