@@ -42,5 +42,6 @@ Rails.application.routes.draw do
 
 
   #### votes-related ####
-
+  post "/review-votes/get", to: 'votes#get_vote'
+  post "/review-votes/construct", to: 'votes#construct_vote'
 end
