@@ -350,9 +350,8 @@ class UserSharesController < ApplicationController
     # destroy/deactivate user_share-associated items
     # link if this only user_share with link
     if @user_share.link.user_shares.length == 1
-      @link_tag_join = LinkTagJoin.find(@user_share.link.user_shares.first.id)
 
-      @link_tag_join.destroy
+      @user_share.link.link_tag_joins.first.destroy
 
       @user_share.link.destroy
     end
