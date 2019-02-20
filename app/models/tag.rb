@@ -9,6 +9,18 @@ class Tag < ApplicationRecord
   #### associations ####
   validates :title, presence: true
   validates :title, uniqueness: true
+
+
+  # for seeding purposes
+  def self.random_group_of_x(x) 
+    # return an array of length 1..x tags,  
+    output = []
+    x.times do 
+      output << self.all.sample.title
+    end
+
+    output
+  end
 end
 
 # done associations
