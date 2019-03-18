@@ -2,6 +2,10 @@
 
 ## LinkShare: Community-based internet exploration
 
+[![thumbnail](https://i.ytimg.com/vi/5IODtglMM_0/hqdefault.jpg?sqp=-oaymwEZCPYBEIoBSFXyq4qpAwsIARUAAIhCGAFwAQ==&rs=AOn4CLDPL3TqDVaLlTyQxCWkWDK7eIt_EA)](https://www.youtube.com/watch?v=5IODtglMM_0)
+
+(click image for demo)
+
 This web application is powered by a Ruby on Rails (API), React, and Semantic UI.
 
 The concept-board for this project includes three things:
